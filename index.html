@@ -35,7 +35,7 @@
       to { opacity: 0; }
     }
 
-    /* Cake (original style) */
+    /* Cake */
     .cake {
       position: absolute;
       top: 50%;
@@ -98,7 +98,7 @@
       to { opacity: 0; transform: translateX(-50%) scale(0.1); }
     }
 
-    /* Heart-shaped balloons */
+    /* Heart balloons */
     .balloon {
       position: absolute;
       bottom: -150px;
@@ -119,17 +119,9 @@
       border-radius: 50%;
     }
 
-    .balloon::before {
-      top: -30px;
-      left: 0;
-    }
+    .balloon::before { top: -30px; left: 0; }
+    .balloon::after { left: 30px; top: 0; }
 
-    .balloon::after {
-      left: 30px;
-      top: 0;
-    }
-
-    /* Curly ribbon string */
     .string {
       position: absolute;
       top: 60px;
@@ -183,7 +175,7 @@
       opacity: 1;
     }
 
-    /* Cherry blossom petals */
+    /* Petals */
     .petal {
       position: absolute;
       top: -10px;
@@ -220,7 +212,8 @@
   <button id="goodBoyBtn">press here if u r my good boy :p</button>
   <div id="note" class="note">You’re the sweetest part of my life 💖</div>
 
-  <audio id="bgMusic" src="your-music.mp3" preload="auto" loop></audio>
+  <!-- Background music -->
+  <audio id="bgMusic" src="The Stranglers  Golden Brown (But its the best part looped).mp3" preload="auto" loop></audio>
 
   <script>
     let step = 0;
@@ -242,19 +235,22 @@
         scene2.style.opacity = 0;
         setTimeout(() => { cakeScene.style.display = "block"; cakeScene.style.opacity = 1; }, 1000);
       } else if (step === 3) {
-        // Blow out candles
         const flames = document.querySelectorAll(".flame");
         flames.forEach(f => f.style.animation = "blowOut 2s forwards");
 
         setTimeout(() => {
           flames.forEach(f => f.style.display = "none");
           cakeScene.style.opacity = 0;
-        }, 2000);
 
-        setTimeout(() => {
+          // spawn balloons right away
           spawnBalloons(15);
-          goodBoyBtn.style.display = "block";
-        }, 2500);
+
+          // show button after 2.5s delay
+          setTimeout(() => {
+            goodBoyBtn.style.display = "block";
+          }, 2500);
+
+        }, 2000);
       }
     });
 
@@ -277,20 +273,12 @@
       }
     }
 
-    // 🌸 Button action
     goodBoyBtn.addEventListener("click", () => {
       note.classList.add("show");
-
-      // play music
       bgMusic.play();
 
-      // burst of 200 petals
       spawnPetals(200);
-
-      // continuous drizzle
-      setInterval(() => {
-        spawnPetals(15);
-      }, 800);
+      setInterval(() => { spawnPetals(15); }, 800);
     });
 
     function spawnPetals(count) {
