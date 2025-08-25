@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5e6da;
+      font-family: "Papyrus", cursive;
+      overflow: hidden;
+    }
+
+    .fade-text {
+      font-size: 2rem;
+      color: #5c2c1d;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      text-align: center;
+    }
+
+    .blink {
+      font-size: 1rem;
+      margin-top: 10px;
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    /* 🎂 Cake */
+    .cake {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 150px;
+      background: #8b4513;
+      border-radius: 10px;
+      display: none;
+      transition: opacity 1s;
+    }
+
+    .cake::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 30px;
+      background: #d2691e;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .candle {
+      position: absolute;
+      width: 10px;
+      height: 40px;
+      background: #fffacd;
+      top: -40px;
+      border-radius: 2px;
+    }
+
+    .candle:nth-child(1) { left: 20px; }
+    .candle:nth-child(2) { left: 60px; }
+    .candle:nth-child(3) { left: 100px; }
+    .candle:nth-child(4) { left: 140px; }
+    .candle:nth-child(5) { left: 180px; }
+
+    .flame {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 20px;
+      background: radial-gradient(circle, gold 40%, orange 70%, transparent 100%);
+      border-radius: 50%;
+      animation: flicker 0.4s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); }
+      to { transform: translateX(-50%) scale(1.2); }
+    }
+
+    @keyframes blowOut {
+      from { opacity: 1; transform: translateX(-50%) scale(1); }
+      to { opacity: 0; transform: translateX(-50%) scale(0.2); }
+    }
+
+    /* ❤️ Heart-shaped balloons */
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 60px;
+      height: 60px;
+      background: red;
+      transform: rotate(-45deg);
+      animation: floatUp 6s linear forwards;
+    }
+
+    .balloon::before,
+    .balloon::after {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .balloon::before { top: -30px; left: 0; }
+    .balloon::after { left: 30px; top: 0; }
+
+    /* 🎀 Curly ribbon string */
+    .string {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      width: 2px;
+      height: 80px;
+      background: transparent;
+      transform: translateX(-50%);
+    }
+
+    .string::after {
+      content: "𓍯𓂃𓂃𓂃";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px;
+      color: #444;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0) rotate(-45deg); opacity: 1; }
+      to { transform: translateY(-120vh) rotate(-45deg); opacity: 0; }
+    }
+
+    /* 🎛️ Button Styling */
+    #goodBoyBtn {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      font-family: "Papyrus", cursive;
+      color: #fff;
+      background: #c94f7c;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    #goodBoyBtn.show { opacity: 1; }
+
+    /* 💌 Note */
+    #note {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff5f7;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      text-align: center;
+      font-size: 1.4rem;
+      color: #5c2c1d;
+    }
+    #note.show { opacity: 1; }
+
+    /* 🌸 Cherry blossom petals */
+    .petal {
+      position: absolute;
+      top: -40px;
+      width: 22px;
+      height: 22px;
+      background: pink;
+      border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
+      opacity: 0.85;
+      animation: fall 6s linear forwards, drift 3s ease-in-out infinite;
+      transform: rotate(45deg);
+      box-shadow: inset -2px -2px 4px rgba(255, 182, 193, 0.6);
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+    @keyframes drift {
+      0% { margin-left: 0; }
+      50% { margin-left: 20px; }
+      100% { margin-left: -20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="scene1" class="fade-text">
+    Happy Birthday my kuchikuchikuuu &lt;3
+    <div class="blink">tap on the screen</div>
+  </div>
+
+  <div id="scene2" class="fade-text">
+    Here is a cake for all the years you haven’t had your own cake :33
+  </div>
+
+  <div id="cakeScene" class="cake">
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+  </div>
+
+  <button id="goodBoyBtn">press here if u r my good boy :p</button>
+  <div id="note">Here’s a little note just for you 💌</div>
+
+  <script>
+    let step = 0;
+    const scene1 = document.getElementById("scene1");
+    const scene2 = document.getElementById("scene2");
+    const cakeScene = document.getElementById("cakeScene");
+    const goodBoyBtn = document.getElementById("goodBoyBtn");
+    const note = document.getElementById("note");
+
+    scene1.style.opacity = 1;
+
+    document.body.addEventListener("click", () => {
+      step++;
+      if (step === 1) {
+        scene1.style.opacity = 0;
+        setTimeout(() => { scene2.style.opacity = 1; }, 1000);
+      } else if (step === 2) {
+        scene2.style.opacity = 0;
+        setTimeout(() => { cakeScene.style.display = "block"; }, 1000);
+      } else if (step === 3) {
+        // Blow out flames slowly
+        const flames = document.querySelectorAll(".flame");
+        flames.forEach(f => {
+          f.style.animation = "blowOut 1s forwards";
+        });
+
+        // Balloons appear after 1.5s
+        setTimeout(() => {
+          spawnBalloons(15);
+        }, 1500);
+
+        // Fade out cake then show button
+        setTimeout(() => {
+          cakeScene.style.opacity = 0;
+          setTimeout(() => {
+            cakeScene.style.display = "none";
+            goodBoyBtn.classList.add("show");
+          }, 1000);
+        }, 2500);
+      }
+    });
+
+    function spawnBalloons(count) {
+      const colors = ["#ff4d6d", "#ff7f7f", "#e75480", "#ff9999", "#cc3366"];
+      for (let i = 0; i < count; i++) {
+        let b = document.createElement("div");
+        b.className = "balloon";
+        b.style.left = Math.random() * 90 + "vw";
+        b.style.background = colors[Math.floor(Math.random() * colors.length)];
+        b.style.animationDuration = (4 + Math.random() * 2) + "s";
+
+        let s = document.createElement("div");
+        s.className = "string";
+        b.appendChild(s);
+
+        document.body.appendChild(b);
+        setTimeout(() => b.remove(), 6000);
+      }
+    }
+
+    // 🌸 Button action
+    goodBoyBtn.addEventListener("click", () => {
+      note.classList.add("show");
+      spawnPetals(30);
+    });
+
+    function spawnPetals(count) {
+      for (let i = 0; i < count; i++) {
+        let p = document.createElement("div");
+        p.className = "petal";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDuration = (5 + Math.random() * 3) + "s";
+        p.style.width = p.style.height = (15 + Math.random() * 10) + "px";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 8000);
+      }
+    }
+  </script>
+</body>
+</html>
