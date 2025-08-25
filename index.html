@@ -47,7 +47,6 @@
       display: none;
       overflow: hidden;
       text-align: center;
-      color: #fff;
     }
 
     .cake::before {
@@ -106,6 +105,13 @@
       to { transform: translateX(-50%) scale(1.2); opacity: 0.9; }
     }
 
+    .cake-text {
+      margin-top: 180px;
+      font-size: 1rem;
+      color: #5c2c1d;
+      animation: blink 1s infinite alternate;
+    }
+
     /* Heart-shaped balloons */
     .balloon {
       position: absolute;
@@ -127,8 +133,15 @@
       border-radius: 50%;
     }
 
-    .balloon::before { top: -30px; left: 0; }
-    .balloon::after { left: 30px; top: 0; }
+    .balloon::before {
+      top: -30px;
+      left: 0;
+    }
+
+    .balloon::after {
+      left: 30px;
+      top: 0;
+    }
 
     @keyframes floatUp {
       from { transform: translateY(0) rotate(-45deg); opacity: 1; }
@@ -152,7 +165,9 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
       transition: background 0.3s;
     }
-    #goodBoyBtn:hover { background: #e63e5c; }
+    #goodBoyBtn:hover {
+      background: #e63e5c;
+    }
 
     /* Note */
     #note {
@@ -171,10 +186,10 @@
     .petal {
       position: absolute;
       top: -10px;
-      width: 25px;
-      height: 25px;
-      background: pink;
-      border-radius: 50% 50% 50% 50%;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle at 30% 30%, #ffb7c5 40%, #ff69b4 80%);
+      border-radius: 60% 60% 60% 60%;
       opacity: 0.9;
       animation: fall linear forwards;
     }
@@ -187,7 +202,7 @@
 <body>
   <div id="scene1" class="fade-text">
     Happy Birthday my kuchikuchikuuu &lt;3
-    <div class="blink">tap on the screen</div>
+    <div class="blink" id="tapText">tap on the screen</div>
   </div>
 
   <div id="scene2" class="fade-text">
@@ -195,21 +210,19 @@
   </div>
 
   <div id="cakeScene" class="cake">
-    <div>(tap to blow the candles)</div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
+    <div class="cake-text">(tap to blow the candles)</div>
   </div>
 
   <button id="goodBoyBtn">press here if u r my good boy :p</button>
   <div id="note">You are my forever good boy &lt;3</div>
 
-  <!-- Hidden YouTube music iframe -->
-  <iframe id="ytPlayer" width="0" height="0" 
-    src="https://www.youtube.com/embed/VjipUXcbGKA?enablejsapi=1&version=3" 
-    frameborder="0"></iframe>
+  <!-- Music -->
+  <audio id="bgMusic" src="your-music.mp3" preload="auto" loop></audio>
 
   <script>
     let step = 0;
@@ -218,12 +231,15 @@
     const cakeScene = document.getElementById("cakeScene");
     const btn = document.getElementById("goodBoyBtn");
     const note = document.getElementById("note");
+    const bgMusic = document.getElementById("bgMusic");
+    const tapText = document.getElementById("tapText");
 
     scene1.style.opacity = 1;
 
     document.body.addEventListener("click", () => {
       step++;
       if (step === 1) {
+        tapText.style.display = "none"; // hide tap prompt after first tap
         scene1.style.opacity = 0;
         setTimeout(() => { scene2.style.opacity = 1; }, 1000);
       } else if (step === 2) {
@@ -237,7 +253,10 @@
           f.style.opacity = 0;
           f.style.transform = "translateX(-50%) scale(0.5)";
         });
-        setTimeout(() => { spawnBalloons(15); }, 1500);
+
+        setTimeout(() => {
+          spawnBalloons(15);
+        }, 1500);
       } else if (step === 4) {
         // Fade out cake
         cakeScene.style.transition = "opacity 2s ease-in-out";
@@ -251,12 +270,8 @@
 
     btn.addEventListener("click", () => {
       note.style.opacity = 1;
-      btn.innerText = "cherry blossom shower <3";
+      bgMusic.play();
       spawnPetals(200);
-
-      // Play YouTube song
-      const ytPlayer = document.getElementById("ytPlayer");
-      ytPlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
     });
 
     function spawnBalloons(count) {
@@ -277,7 +292,6 @@
         let p = document.createElement("div");
         p.className = "petal";
         p.style.left = Math.random() * 100 + "vw";
-        p.style.background = "radial-gradient(circle at 30% 30%, #ffb7c5 40%, #ff69b4 80%)";
         p.style.animationDuration = (5 + Math.random() * 5) + "s";
         document.body.appendChild(p);
         setTimeout(() => p.remove(), 10000);
