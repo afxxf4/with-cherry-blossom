@@ -41,70 +41,54 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 260px;
-      height: 160px;
+      width: 220px;
+      height: 140px;
       background: #8b4513;
-      border-radius: 0 0 15px 15px;
+      border-radius: 10px;
       display: none;
-      box-shadow: inset 0 -10px 0 #5c2c1d;
+      overflow: visible;
     }
 
     .cake::before {
       content: "";
       position: absolute;
-      top: -40px;
+      top: -30px;
       left: 50%;
       transform: translateX(-50%);
-      width: 280px;
-      height: 40px;
+      width: 240px;
+      height: 35px;
       background: #d2691e;
-      border-radius: 15px 15px 0 0;
-      box-shadow: inset 0 -6px 0 #a0522d;
+      border-radius: 12px 12px 0 0;
     }
 
-    /* Chocolate drip */
-    .drip {
+    .cake::after {
+      content: "";
       position: absolute;
-      top: -20px;
-      width: 30px;
-      height: 25px;
-      background: #3e1f0d;
-      border-radius: 50%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: repeating-linear-gradient(
+        to right,
+        #3e2723 0 12px,
+        transparent 12px 24px
+      );
     }
-    .drip:nth-child(1) { left: 30px; }
-    .drip:nth-child(2) { left: 90px; }
-    .drip:nth-child(3) { left: 150px; }
-    .drip:nth-child(4) { left: 210px; }
 
-    /* Choco chips */
-    .chip {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: #2c1a10;
-      border-radius: 50%;
-      top: -25px;
-    }
-    .chip:nth-child(5) { left: 40px; }
-    .chip:nth-child(6) { left: 80px; }
-    .chip:nth-child(7) { left: 120px; }
-    .chip:nth-child(8) { left: 160px; }
-    .chip:nth-child(9) { left: 200px; }
-
-    /* Candles */
     .candle {
       position: absolute;
       width: 12px;
-      height: 45px;
+      height: 40px;
       background: #fffacd;
-      top: -45px;
+      top: -40px;
       border-radius: 3px;
     }
-    .candle:nth-child(10) { left: 40px; }
-    .candle:nth-child(11) { left: 80px; }
-    .candle:nth-child(12) { left: 120px; }
-    .candle:nth-child(13) { left: 160px; }
-    .candle:nth-child(14) { left: 200px; }
+
+    .candle:nth-child(1) { left: 20px; }
+    .candle:nth-child(2) { left: 60px; }
+    .candle:nth-child(3) { left: 100px; }
+    .candle:nth-child(4) { left: 140px; }
+    .candle:nth-child(5) { left: 180px; }
 
     .flame {
       position: absolute;
@@ -115,25 +99,25 @@
       height: 22px;
       background: radial-gradient(circle, gold 40%, orange 70%, transparent 100%);
       border-radius: 50%;
-      animation: flicker 0.3s infinite alternate;
+      animation: flicker 0.4s infinite alternate;
     }
 
     @keyframes flicker {
-      from { transform: translateX(-50%) scale(1); }
-      to { transform: translateX(-50%) scale(1.2); }
+      from { transform: translateX(-50%) scale(1); opacity: 1; }
+      to { transform: translateX(-50%) scale(1.15); opacity: 0.85; }
     }
 
-    @keyframes blowOut {
-      0% { opacity: 1; transform: translateX(-50%) scale(1); }
-      100% { opacity: 0; transform: translateX(-50%) scale(0.2); }
+    .cake-text {
+      position: absolute;
+      bottom: -40px;
+      width: 100%;
+      font-size: 1rem;
+      color: #5c2c1d;
+      text-align: center;
+      animation: blink 1s infinite alternate;
     }
 
-    .fade-out {
-      opacity: 0 !important;
-      transition: opacity 1.5s ease-out;
-    }
-
-    /* Heart-shaped balloons */
+    /* Heart balloons */
     .balloon {
       position: absolute;
       bottom: -150px;
@@ -143,6 +127,7 @@
       transform: rotate(-45deg);
       animation: floatUp 6s linear forwards;
     }
+
     .balloon::before,
     .balloon::after {
       content: "";
@@ -152,6 +137,7 @@
       background: inherit;
       border-radius: 50%;
     }
+
     .balloon::before { top: -30px; left: 0; }
     .balloon::after { left: 30px; top: 0; }
 
@@ -164,18 +150,20 @@
     #goodBoyBtn {
       display: none;
       position: absolute;
-      bottom: 40px;
+      bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 12px 24px;
-      background: #ff4d6d;
-      color: white;
+      padding: 10px 20px;
       font-size: 1rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
+      background: #ff4d6d;
+      color: white;
       cursor: pointer;
-      font-family: "Papyrus", cursive;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s;
     }
+    #goodBoyBtn:hover { background: #e63e5c; }
 
     /* Note */
     #note {
@@ -186,25 +174,24 @@
       font-size: 1.5rem;
       color: #5c2c1d;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 2s ease-in-out;
       text-align: center;
     }
-    #note.show { opacity: 1; }
 
-    /* Cherry blossom petals */
+    /* Cherry blossoms */
     .petal {
-      position: fixed;
+      position: absolute;
       top: -10px;
       width: 25px;
       height: 25px;
-      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cherry_blossom_icon.svg/1024px-Cherry_blossom_icon.svg.png');
-      background-size: cover;
+      background: pink;
+      border-radius: 50% 50% 50% 50%;
       opacity: 0.9;
-      pointer-events: none;
       animation: fall linear forwards;
     }
+
     @keyframes fall {
-      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
@@ -219,36 +206,30 @@
   </div>
 
   <div id="cakeScene" class="cake">
-    <div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div>
-    <div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
     <div class="candle"><div class="flame"></div></div>
-  </div>
-
-  <div id="cakeInstruction" class="fade-text" style="font-size:1.2rem; top:70%; position:absolute;">
-    (tap to blow the candles)
+    <div class="cake-text">(tap to blow the candles)</div>
   </div>
 
   <button id="goodBoyBtn">press here if u r my good boy :p</button>
-  <div id="note">Here’s a special note just for you ❤️</div>
+  <div id="note">You are my forever good boy &lt;3</div>
 
-  <!-- YouTube API -->
-  <div id="player"></div>
+  <!-- Music -->
+  <audio id="bgMusic" src="your-music.mp3" preload="auto" loop></audio>
 
   <script>
     let step = 0;
     const scene1 = document.getElementById("scene1");
     const scene2 = document.getElementById("scene2");
     const cakeScene = document.getElementById("cakeScene");
-    const cakeInstruction = document.getElementById("cakeInstruction");
-    const goodBoyBtn = document.getElementById("goodBoyBtn");
+    const btn = document.getElementById("goodBoyBtn");
     const note = document.getElementById("note");
+    const bgMusic = document.getElementById("bgMusic");
 
     scene1.style.opacity = 1;
-    cakeInstruction.style.display = "none";
 
     document.body.addEventListener("click", () => {
       step++;
@@ -257,26 +238,31 @@
         setTimeout(() => { scene2.style.opacity = 1; }, 1000);
       } else if (step === 2) {
         scene2.style.opacity = 0;
-        setTimeout(() => { 
-          cakeScene.style.display = "block"; 
-          cakeInstruction.style.display = "block"; 
-          cakeInstruction.style.opacity = 1;
-        }, 1000);
+        setTimeout(() => { cakeScene.style.display = "block"; cakeScene.style.opacity = 1; }, 1000);
       } else if (step === 3) {
-        // Blow out candles
+        // Blow candles
         const flames = document.querySelectorAll(".flame");
-        flames.forEach(f => f.style.animation = "blowOut 1.5s forwards");
-        cakeInstruction.style.opacity = 0;
-
-        // Fade cake out after blow
-        setTimeout(() => cakeScene.classList.add("fade-out"), 1500);
-
-        // Balloons after cake fades
-        setTimeout(() => spawnBalloons(15), 1800);
-
-        // Show button after
-        setTimeout(() => goodBoyBtn.style.display = "block", 3000);
+        flames.forEach(f => {
+          f.style.transition = "opacity 2s ease-out, transform 2s ease-out";
+          f.style.opacity = 0;
+          f.style.transform = "translateX(-50%) scale(0.5)";
+        });
+        setTimeout(() => { spawnBalloons(15); }, 1500);
+      } else if (step === 4) {
+        // Fade cake
+        cakeScene.style.transition = "opacity 2s ease-in-out";
+        cakeScene.style.opacity = 0;
+        setTimeout(() => {
+          cakeScene.style.display = "none";
+          btn.style.display = "block";
+        }, 2000);
       }
+    });
+
+    btn.addEventListener("click", () => {
+      note.style.opacity = 1;
+      bgMusic.play();
+      spawnPetals(200);
     });
 
     function spawnBalloons(count) {
@@ -297,33 +283,12 @@
         let p = document.createElement("div");
         p.className = "petal";
         p.style.left = Math.random() * 100 + "vw";
+        p.style.background = "radial-gradient(circle at 30% 30%, #ffb7c5 40%, #ff69b4 80%)";
         p.style.animationDuration = (5 + Math.random() * 5) + "s";
         document.body.appendChild(p);
-        setTimeout(() => p.remove(), 12000);
+        setTimeout(() => p.remove(), 10000);
       }
     }
-
-    goodBoyBtn.addEventListener("click", () => {
-      note.classList.add("show");
-      goodBoyBtn.innerText = "cherry blossom shower <3";
-      if (player && player.playVideo) { player.playVideo(); }
-      setInterval(() => spawnPetals(8), 400);
-      spawnPetals(50);
-    });
-
-    // YouTube player
-    let player;
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player("player", {
-        height: "0",
-        width: "0",
-        videoId: "VjipUXcbGKA", // your song link
-        events: {
-          onReady: (event) => { event.target.setVolume(50); }
-        }
-      });
-    }
   </script>
-  <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
