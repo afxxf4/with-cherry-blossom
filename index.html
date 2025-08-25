@@ -35,41 +35,30 @@
       to { opacity: 0; }
     }
 
+    /* 🍰 Cake */
     .cake {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 220px;
-      height: 160px;
+      width: 200px;
+      height: 120px;
       background: #8b4513;
       border-radius: 10px;
       display: none;
-      overflow: hidden;
+      transition: opacity 1s ease;
     }
 
     .cake::before {
       content: "";
       position: absolute;
-      top: -30px;
+      top: -25px;
       left: 50%;
       transform: translateX(-50%);
-      width: 240px;
-      height: 35px;
+      width: 220px;
+      height: 30px;
       background: #d2691e;
       border-radius: 10px 10px 0 0;
-    }
-
-    /* Chocolate syrup drips */
-    .cake::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 25px;
-      background: radial-gradient(circle at 10% 40%, #3e2723 15%, transparent 20%) repeat-x;
-      background-size: 30px 30px;
     }
 
     .candle {
@@ -104,7 +93,12 @@
       to { transform: translateX(-50%) scale(1.2); opacity: 0.9; }
     }
 
-    /* Heart-shaped balloons */
+    @keyframes blowOut {
+      from { opacity: 1; transform: translateX(-50%) scale(1); }
+      to { opacity: 0; transform: translateX(-50%) scale(0.1); }
+    }
+
+    /* 🎈 Heart-shaped balloons */
     .balloon {
       position: absolute;
       bottom: -150px;
@@ -125,14 +119,24 @@
       border-radius: 50%;
     }
 
-    .balloon::before {
-      top: -30px;
-      left: 0;
+    .balloon::before { top: -30px; left: 0; }
+    .balloon::after { left: 30px; top: 0; }
+
+    /* Curly ribbon string */
+    .string {
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      color: #444;
+      animation: sway 2s infinite ease-in-out;
     }
 
-    .balloon::after {
-      left: 30px;
-      top: 0;
+    @keyframes sway {
+      0% { transform: translateX(-50%) rotate(-5deg); }
+      50% { transform: translateX(-50%) rotate(5deg); }
+      100% { transform: translateX(-50%) rotate(-5deg); }
     }
 
     @keyframes floatUp {
@@ -140,54 +144,51 @@
       to { transform: translateY(-120vh) rotate(-45deg); opacity: 0; }
     }
 
-    /* Button */
-    #goodBoyBtn {
-      display: none;
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 10px;
-      background: #ff4d6d;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-      transition: background 0.3s;
-    }
-    #goodBoyBtn:hover {
-      background: #e63e5c;
-    }
-
-    /* Note */
-    #note {
+    /* 📜 Note */
+    .note {
+      opacity: 0;
+      font-size: 1.5rem;
+      color: #5c2c1d;
+      text-align: center;
+      transition: opacity 2s ease;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 1.5rem;
-      color: #5c2c1d;
-      opacity: 0;
-      transition: opacity 2s ease-in-out;
-      text-align: center;
     }
+    .note.show { opacity: 1; }
 
-    /* Cherry blossoms */
+    /* 🌸 Petals */
     .petal {
-      position: absolute;
-      top: -10px;
-      width: 25px;
-      height: 25px;
-      background: pink;
-      border-radius: 50% 50% 50% 50%;
+      position: fixed;
+      top: -50px;
+      font-size: 20px;
       opacity: 0.9;
+      pointer-events: none;
       animation: fall linear forwards;
     }
 
     @keyframes fall {
-      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* 🎶 Button */
+    #goodBoyBtn {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: #ff7f7f;
+      color: white;
+      cursor: pointer;
+      display: none;
     }
   </style>
 </head>
@@ -209,10 +210,9 @@
     <div class="candle"><div class="flame"></div></div>
   </div>
 
+  <div id="note" class="note">Here’s my special note just for you ❤️</div>
   <button id="goodBoyBtn">press here if u r my good boy :p</button>
-  <div id="note">You are my forever good boy &lt;3</div>
 
-  <!-- Music -->
   <audio id="bgMusic" src="your-music.mp3" preload="auto" loop></audio>
 
   <script>
@@ -220,7 +220,7 @@
     const scene1 = document.getElementById("scene1");
     const scene2 = document.getElementById("scene2");
     const cakeScene = document.getElementById("cakeScene");
-    const btn = document.getElementById("goodBoyBtn");
+    const goodBoyBtn = document.getElementById("goodBoyBtn");
     const note = document.getElementById("note");
     const bgMusic = document.getElementById("bgMusic");
 
@@ -233,36 +233,27 @@
         setTimeout(() => { scene2.style.opacity = 1; }, 1000);
       } else if (step === 2) {
         scene2.style.opacity = 0;
-        setTimeout(() => { cakeScene.style.display = "block"; }, 1000);
+        setTimeout(() => { cakeScene.style.display = "block"; cakeScene.style.opacity = 1; }, 1000);
       } else if (step === 3) {
-        // Slow blow out
+        // Blow out candles slowly
         const flames = document.querySelectorAll(".flame");
-        flames.forEach(f => {
-          f.style.transition = "opacity 2s ease-out, transform 2s ease-out";
-          f.style.opacity = 0;
-          f.style.transform = "translateX(-50%) scale(0.5)";
-        });
+        flames.forEach(f => f.style.animation = "blowOut 2s forwards");
 
         setTimeout(() => {
-          spawnBalloons(15);
-        }, 1500);
-      } else if (step === 4) {
-        // Fade out cake
-        cakeScene.style.transition = "opacity 2s ease-in-out";
-        cakeScene.style.opacity = 0;
-        setTimeout(() => {
-          cakeScene.style.display = "none";
-          btn.style.display = "block";
+          flames.forEach(f => f.style.display = "none");
+          cakeScene.style.opacity = 0; // fade out cake
         }, 2000);
+
+        // Balloons + music + button
+        setTimeout(() => {
+          spawnBalloons(15);
+          bgMusic.play();
+          goodBoyBtn.style.display = "block";
+        }, 2500);
       }
     });
 
-    btn.addEventListener("click", () => {
-      note.style.opacity = 1;
-      bgMusic.play();
-      spawnPetals(200);
-    });
-
+    // 🎈 Balloons
     function spawnBalloons(count) {
       const colors = ["#ff4d6d", "#ff7f7f", "#e75480", "#ff9999", "#cc3366"];
       for (let i = 0; i < count; i++) {
@@ -271,22 +262,43 @@
         b.style.left = Math.random() * 90 + "vw";
         b.style.background = colors[Math.floor(Math.random() * colors.length)];
         b.style.animationDuration = (4 + Math.random() * 2) + "s";
+
+        let s = document.createElement("div");
+        s.className = "string";
+        s.textContent = "𓍯𓂃𓂃𓂃"; // curly string
+        b.appendChild(s);
+
         document.body.appendChild(b);
         setTimeout(() => b.remove(), 6000);
       }
     }
 
+    // 🌸 Petals
     function spawnPetals(count) {
       for (let i = 0; i < count; i++) {
-        let p = document.createElement("div");
-        p.className = "petal";
-        p.style.left = Math.random() * 100 + "vw";
-        p.style.background = "radial-gradient(circle at 30% 30%, #ffb7c5 40%, #ff69b4 80%)";
-        p.style.animationDuration = (5 + Math.random() * 5) + "s";
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 10000);
+        let petal = document.createElement("div");
+        petal.className = "petal";
+        petal.innerHTML = "🌸";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = (5 + Math.random() * 5) + "s";
+        petal.style.fontSize = (16 + Math.random() * 14) + "px";
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 10000);
       }
     }
+
+    // 📜 Button action
+    goodBoyBtn.addEventListener("click", () => {
+      note.classList.add("show");
+
+      // burst of 200 petals
+      spawnPetals(200);
+
+      // continuous petals
+      setInterval(() => {
+        spawnPetals(15);
+      }, 800);
+    });
   </script>
 </body>
 </html>
