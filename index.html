@@ -35,18 +35,17 @@
       to { opacity: 0; }
     }
 
-    /* 🎂 Cake */
     .cake {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 200px;
-      height: 150px;
+      width: 220px;
+      height: 160px;
       background: #8b4513;
       border-radius: 10px;
       display: none;
-      transition: opacity 1s;
+      overflow: hidden;
     }
 
     .cake::before {
@@ -55,10 +54,22 @@
       top: -30px;
       left: 50%;
       transform: translateX(-50%);
-      width: 220px;
-      height: 30px;
+      width: 240px;
+      height: 35px;
       background: #d2691e;
       border-radius: 10px 10px 0 0;
+    }
+
+    /* Chocolate syrup drips */
+    .cake::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 25px;
+      background: radial-gradient(circle at 10% 40%, #3e2723 15%, transparent 20%) repeat-x;
+      background-size: 30px 30px;
     }
 
     .candle {
@@ -85,20 +96,15 @@
       height: 20px;
       background: radial-gradient(circle, gold 40%, orange 70%, transparent 100%);
       border-radius: 50%;
-      animation: flicker 0.4s infinite alternate;
+      animation: flicker 0.3s infinite alternate;
     }
 
     @keyframes flicker {
-      from { transform: translateX(-50%) scale(1); }
-      to { transform: translateX(-50%) scale(1.2); }
+      from { transform: translateX(-50%) scale(1); opacity: 1; }
+      to { transform: translateX(-50%) scale(1.2); opacity: 0.9; }
     }
 
-    @keyframes blowOut {
-      from { opacity: 1; transform: translateX(-50%) scale(1); }
-      to { opacity: 0; transform: translateX(-50%) scale(0.2); }
-    }
-
-    /* ❤️ Heart-shaped balloons */
+    /* Heart-shaped balloons */
     .balloon {
       position: absolute;
       bottom: -150px;
@@ -119,28 +125,14 @@
       border-radius: 50%;
     }
 
-    .balloon::before { top: -30px; left: 0; }
-    .balloon::after { left: 30px; top: 0; }
-
-    /* 🎀 Curly ribbon string */
-    .string {
-      position: absolute;
-      top: 60px;
-      left: 50%;
-      width: 2px;
-      height: 80px;
-      background: transparent;
-      transform: translateX(-50%);
+    .balloon::before {
+      top: -30px;
+      left: 0;
     }
 
-    .string::after {
-      content: "𓍯𓂃𓂃𓂃";
-      position: absolute;
+    .balloon::after {
+      left: 30px;
       top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 18px;
-      color: #444;
     }
 
     @keyframes floatUp {
@@ -148,65 +140,54 @@
       to { transform: translateY(-120vh) rotate(-45deg); opacity: 0; }
     }
 
-    /* 🎛️ Button Styling */
+    /* Button */
     #goodBoyBtn {
+      display: none;
       position: absolute;
-      bottom: 50px;
+      bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 12px 24px;
-      font-size: 1.1rem;
-      font-family: "Papyrus", cursive;
-      color: #fff;
-      background: #c94f7c;
+      padding: 10px 20px;
+      font-size: 1rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
+      background: #ff4d6d;
+      color: white;
       cursor: pointer;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s;
     }
-    #goodBoyBtn.show { opacity: 1; }
+    #goodBoyBtn:hover {
+      background: #e63e5c;
+    }
 
-    /* 💌 Note */
+    /* Note */
     #note {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #fff5f7;
-      padding: 20px 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      text-align: center;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       color: #5c2c1d;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      text-align: center;
     }
-    #note.show { opacity: 1; }
 
-    /* 🌸 Cherry blossom petals */
+    /* Cherry blossoms */
     .petal {
       position: absolute;
-      top: -40px;
-      width: 22px;
-      height: 22px;
+      top: -10px;
+      width: 25px;
+      height: 25px;
       background: pink;
-      border-radius: 60% 40% 70% 30% / 60% 30% 70% 40%;
-      opacity: 0.85;
-      animation: fall 6s linear forwards, drift 3s ease-in-out infinite;
-      transform: rotate(45deg);
-      box-shadow: inset -2px -2px 4px rgba(255, 182, 193, 0.6);
+      border-radius: 50% 50% 50% 50%;
+      opacity: 0.9;
+      animation: fall linear forwards;
     }
+
     @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
-    @keyframes drift {
-      0% { margin-left: 0; }
-      50% { margin-left: 20px; }
-      100% { margin-left: -20px; }
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
@@ -229,15 +210,19 @@
   </div>
 
   <button id="goodBoyBtn">press here if u r my good boy :p</button>
-  <div id="note">Here’s a little note just for you 💌</div>
+  <div id="note">You are my forever good boy &lt;3</div>
+
+  <!-- Music -->
+  <audio id="bgMusic" src="your-music.mp3" preload="auto" loop></audio>
 
   <script>
     let step = 0;
     const scene1 = document.getElementById("scene1");
     const scene2 = document.getElementById("scene2");
     const cakeScene = document.getElementById("cakeScene");
-    const goodBoyBtn = document.getElementById("goodBoyBtn");
+    const btn = document.getElementById("goodBoyBtn");
     const note = document.getElementById("note");
+    const bgMusic = document.getElementById("bgMusic");
 
     scene1.style.opacity = 1;
 
@@ -250,26 +235,32 @@
         scene2.style.opacity = 0;
         setTimeout(() => { cakeScene.style.display = "block"; }, 1000);
       } else if (step === 3) {
-        // Blow out flames slowly
+        // Slow blow out
         const flames = document.querySelectorAll(".flame");
         flames.forEach(f => {
-          f.style.animation = "blowOut 1s forwards";
+          f.style.transition = "opacity 2s ease-out, transform 2s ease-out";
+          f.style.opacity = 0;
+          f.style.transform = "translateX(-50%) scale(0.5)";
         });
 
-        // Balloons appear after 1.5s
         setTimeout(() => {
           spawnBalloons(15);
         }, 1500);
-
-        // Fade out cake then show button
+      } else if (step === 4) {
+        // Fade out cake
+        cakeScene.style.transition = "opacity 2s ease-in-out";
+        cakeScene.style.opacity = 0;
         setTimeout(() => {
-          cakeScene.style.opacity = 0;
-          setTimeout(() => {
-            cakeScene.style.display = "none";
-            goodBoyBtn.classList.add("show");
-          }, 1000);
-        }, 2500);
+          cakeScene.style.display = "none";
+          btn.style.display = "block";
+        }, 2000);
       }
+    });
+
+    btn.addEventListener("click", () => {
+      note.style.opacity = 1;
+      bgMusic.play();
+      spawnPetals(200);
     });
 
     function spawnBalloons(count) {
@@ -280,31 +271,20 @@
         b.style.left = Math.random() * 90 + "vw";
         b.style.background = colors[Math.floor(Math.random() * colors.length)];
         b.style.animationDuration = (4 + Math.random() * 2) + "s";
-
-        let s = document.createElement("div");
-        s.className = "string";
-        b.appendChild(s);
-
         document.body.appendChild(b);
         setTimeout(() => b.remove(), 6000);
       }
     }
-
-    // 🌸 Button action
-    goodBoyBtn.addEventListener("click", () => {
-      note.classList.add("show");
-      spawnPetals(30);
-    });
 
     function spawnPetals(count) {
       for (let i = 0; i < count; i++) {
         let p = document.createElement("div");
         p.className = "petal";
         p.style.left = Math.random() * 100 + "vw";
-        p.style.animationDuration = (5 + Math.random() * 3) + "s";
-        p.style.width = p.style.height = (15 + Math.random() * 10) + "px";
+        p.style.background = "radial-gradient(circle at 30% 30%, #ffb7c5 40%, #ff69b4 80%)";
+        p.style.animationDuration = (5 + Math.random() * 5) + "s";
         document.body.appendChild(p);
-        setTimeout(() => p.remove(), 8000);
+        setTimeout(() => p.remove(), 10000);
       }
     }
   </script>
